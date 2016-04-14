@@ -22,10 +22,15 @@ public class Algorithim {
         return rank/sourcePrices.size();
     }
 
-    public List ExchangeRatios(List<String> overWeights, List<String> underWeights, Map<String, Number> histories){
+    public List ExchangeRatios(List<String> overWeights, List<String> underWeights, Map<String, List<Number>> histories){
         List Options = new ArrayList();
         for (int o = 0; o >= overWeights.size(); o++){
-            
+            for (int u = 0; u >= underWeights.size(); u++){
+                Options.add(Attractiveness(histories.get(overWeights.get(o)), histories.get(underWeights.get(u))));
+            }
         }
+        Collections.sort(Options);
+        Collections.reverse(Options);
+        return Options;
     }
 }
