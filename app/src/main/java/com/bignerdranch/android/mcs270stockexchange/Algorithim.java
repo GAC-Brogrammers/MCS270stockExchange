@@ -2,8 +2,10 @@ package com.bignerdranch.android.mcs270stockexchange;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by nbens_000 on 4/12/2016.
@@ -23,14 +25,16 @@ public class Algorithim {
     }
 
     public List ExchangeRatios(List<String> overWeights, List<String> underWeights, Map<String, List<Number>> histories){
-        List Options = new ArrayList();
+        ArrayList<ValueComparator> Options = new ArrayList();
         for (int o = 0; o >= overWeights.size(); o++){
             for (int u = 0; u >= underWeights.size(); u++){
-                Options.add(Attractiveness(histories.get(overWeights.get(o)), histories.get(underWeights.get(u))));
+                Options.add(new ValueComparator(overWeights.get(o), underWeights.get(u),
+                        Attractiveness(histories.get(overWeights.get(o)), histories.get(underWeights.get(u)))));
             }
         }
-        Collections.sort(Options);
+        Collections.sort(Options, new ScoreCompare());
         Collections.reverse(Options);
         return Options;
     }
+
 }
