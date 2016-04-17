@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class StockDownloader {
@@ -16,6 +19,10 @@ public class StockDownloader {
     public static final int CLOSE = 4;
     public static final int VOLUME = 5;
     public static final int ADJCLOSE = 6;
+
+    public String name;
+
+    private ArrayList<String> dategetter = new ArrayList<String>();
 
     private ArrayList<GregorianCalendar> dates;
     private ArrayList<Double> opens;
@@ -33,6 +40,8 @@ public class StockDownloader {
         closes = new ArrayList<Double>();
         volumes = new ArrayList<Integer>();
         adjCloses = new ArrayList<Double>();
+
+        name = symbol;
 
         //http://real-chart.finance.yahoo.com/table.csv?s=FB&a=03&b=14&c=2015&d=03&e=14&f=2016&g=d&ignore=.csv
         String url = "http://real-chart.finance.yahoo.com/table.csv?s="+symbol+
@@ -63,11 +72,12 @@ public class StockDownloader {
                     String line = input.nextLine();
                     String[] stockinfo = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                     StockHelper sh = new StockHelper();
-                    adjCloses.add(sh.handleDouble(stockinfo[6]));
+                    dategetter.add(stockinfo[0]);
+                    adjCloses.add(sh.handleDouble(stockinfo[ADJCLOSE]));
                 }
             }
 
-            System.out.println(adjCloses);
+            //System.out.println(adjCloses);
         }
         catch(Exception e){
             System.err.println(e);
@@ -76,7 +86,21 @@ public class StockDownloader {
 
     }
 
+
+    public ArrayList<String> getDateStrings(){
+        return dategetter;
+    }
+
     public ArrayList<GregorianCalendar> getDates(){
+        DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+
+        try {
+            System.out.println(format.parse(dategetter.get(0)));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return dates;
     }
 
@@ -86,6 +110,10 @@ public class StockDownloader {
 
     public ArrayList<Double> getAdjCloses(){
         return adjCloses;
+    }
+
+    public String getTicker(){
+        return name;
     }
 
 
