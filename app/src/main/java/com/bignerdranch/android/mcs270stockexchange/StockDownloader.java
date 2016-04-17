@@ -36,11 +36,11 @@ public class StockDownloader {
 
         //http://real-chart.finance.yahoo.com/table.csv?s=FB&a=03&b=14&c=2015&d=03&e=14&f=2016&g=d&ignore=.csv
         String url = "http://real-chart.finance.yahoo.com/table.csv?s="+symbol+
-                "&a="+start.get(Calendar.MONTH)+
-                "&b="+start.get(Calendar.DAY_OF_MONTH)+
+                "&a="+end.get(Calendar.MONTH)+
+                "&b="+end.get(Calendar.DAY_OF_MONTH)+
                 "&c="+end.get(Calendar.YEAR)+
-                "&d="+end.get(Calendar.MONTH)+
-                "&e="+end.get(Calendar.DAY_OF_MONTH)+
+                "&d="+start.get(Calendar.MONTH)+
+                "&e="+start.get(Calendar.DAY_OF_MONTH)+
                 "&f="+start.get(Calendar.YEAR)+
                 "&g=d&ignore=.csv";
 
