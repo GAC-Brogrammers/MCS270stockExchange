@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">MCS270stockExchange</string>
+    <string name="ticker_name">Ticker</string>>
+    <string name="overweight_box">Overweight</string>
+    <string name="underweight_box">Overweight</string>
+    <string name="neutral_box">Neutral</string>
+    <string name="crime_solved_label">Butts</string>>
+    <string name="crime_suspect_text">Butts</string>
+    <string name="crime_report_text">Butts</string>
+    <string name="crime_details_label">Butts</string>
+    <string name="crime_title_label">Butts</string>
+    <string name="crime_title_hint">Butts</string>
 </resources>
