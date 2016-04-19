@@ -4,4 +4,8 @@
     <string name="overweight_box">OverWeight</string>
     <string name="underweight_box">UnderWeight</string>
     <string name="Neutral_box">Neutral</string>
+    <string name="no_stocks">There are no stocks!</string>
+    <string name="add_stock_new">Add new stock</string>
+    <string name="new_stock">New Stock</string>
+    <string name="delete_stock">Delete Stock</string>
 </resources>
