@@ -5,6 +5,10 @@ import java.util.GregorianCalendar;
 public class Stocks {
 
     public static void main (String [] args){
+
+        //start is today's date
+        //end is a year ago today.
+
         GregorianCalendar start = new GregorianCalendar(2016, 3, 13);
         GregorianCalendar end = new GregorianCalendar(2015, 3, 13);
         StockDownloader test = new StockDownloader("IBM", start, end);

@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class StockDownloader {
 
@@ -25,20 +26,24 @@ public class StockDownloader {
     private ArrayList<String> dategetter = new ArrayList<String>();
 
     private ArrayList<GregorianCalendar> dates;
-    private ArrayList<Double> opens;
-    private ArrayList<Double> highs;
-    private ArrayList<Double> lows;
-    private ArrayList<Double> closes;
-    private ArrayList<Integer> volumes;
+    //private ArrayList<Double> opens;
+    //private ArrayList<Double> highs;
+    //private ArrayList<Double> lows;
+    //private ArrayList<Double> closes;
+    //private ArrayList<Integer> volumes;
     private ArrayList<Double> adjCloses;
 
+
+    //start is today's date
+    //end is a year ago today.
     public StockDownloader(String symbol, GregorianCalendar start, GregorianCalendar end){
+
         dates = new ArrayList<GregorianCalendar>();
-        opens = new ArrayList<Double>();
-        highs = new ArrayList<Double>();
-        lows = new ArrayList<Double>();
-        closes = new ArrayList<Double>();
-        volumes = new ArrayList<Integer>();
+        //opens = new ArrayList<Double>();
+        //highs = new ArrayList<Double>();
+        //lows = new ArrayList<Double>();
+        //closes = new ArrayList<Double>();
+        //volumes = new ArrayList<Integer>();
         adjCloses = new ArrayList<Double>();
 
         name = symbol;
@@ -71,9 +76,8 @@ public class StockDownloader {
                 while(input.hasNextLine()){
                     String line = input.nextLine();
                     String[] stockinfo = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                    StockHelper sh = new StockHelper();
                     dategetter.add(stockinfo[0]);
-                    adjCloses.add(sh.handleDouble(stockinfo[ADJCLOSE]));
+                    adjCloses.add(handleDouble(stockinfo[ADJCLOSE]));
                 }
             }
 
@@ -103,10 +107,11 @@ public class StockDownloader {
 
         return dates;
     }
-
-    public ArrayList<Double> getOpens(){
-        return opens;
-    }
+	
+	/*public ArrayList<Double> getOpens(){
+		return opens;
+	}
+	*/
 
     public ArrayList<Double> getAdjCloses(){
         return adjCloses;
@@ -114,6 +119,26 @@ public class StockDownloader {
 
     public String getTicker(){
         return name;
+    }
+
+    public static double handleDouble(String x) {
+        double y;
+        if (Pattern.matches("N/A", x)) {
+            y = 0.00;
+        } else {
+            y = Double.parseDouble(x);
+        }
+        return y;
+    }
+
+    public static int handleInt(String x) {
+        int y;
+        if (Pattern.matches("N/A", x)) {
+            y = 0;
+        } else {
+            y = Integer.parseInt(x);
+        }
+        return y;
     }
 
 

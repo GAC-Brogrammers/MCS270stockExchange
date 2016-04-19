@@ -10,40 +10,40 @@ import java.util.TreeMap;
 /**
  * Created by nbens_000 on 4/12/2016.
  */
-
-
 public class Algorithim {
 
     private ArrayList<String> overWeights;
     private ArrayList<String> underWeights;
-    ArrayList<ValueComparator> Options = new ArrayList();
+    private ArrayList<Double> exchangeRatio = new ArrayList<Double>();
 
-    Map histories = new HashMap<ArrayList<String>, ArrayList<Double>>();
+    private ArrayList<ExchangeRatios> options = new ArrayList<ExchangeRatios>();
 
+    private String over;
+    private String under;
 
     public Algorithim(ArrayList<String> overWeights, ArrayList<String> underWeights, Map<String, ArrayList<Double>> histories){
         this.underWeights = underWeights;
         this.overWeights = overWeights;
-        this.histories = histories;
-
-        //System.out.println("Butts");
-        //System.out.println(Options);
-
         for (int o = 0; o < overWeights.size(); o++){
             for (int u = 0; u < underWeights.size(); u++){
-                Options.add(new ValueComparator(overWeights.get(o), underWeights.get(u),
+                //If wanting to get ArrayList Exchange Ratio for two particular stocks. Put a counter here. :D
+
+                over = overWeights.get(o);
+                under = underWeights.get(u);
+
+                options.add(new ExchangeRatios(overWeights.get(o), underWeights.get(u),
                         Attractiveness(histories.get(overWeights.get(o)), histories.get(underWeights.get(u)))));
-                //System.out.println(Options);
+                //System.out.println(Options.get(0));
             }
         }
-        Collections.sort(Options, new ScoreCompare());
-        Collections.reverse(Options);
+        Collections.sort(options, new ScoreCompare());
+        Collections.reverse(options);
 
-        //System.out.println(Options.get(0));
+        //System.out.println(exchangeRatio);
 
     }
     public double Attractiveness(ArrayList<Double> sourcePrices, ArrayList<Double> destPrices){
-        ArrayList ratios = new ArrayList();
+        ArrayList<Double> ratios = new ArrayList<Double>();
         for (int i=0; i< sourcePrices.size(); i++){
             double start = (double)sourcePrices.get(i) / (double)destPrices.get(i);
             ratios.add(start);
@@ -53,25 +53,21 @@ public class Algorithim {
         Collections.reverse(ratios);
         int rank = 1 + ratios.indexOf(latest);
 
-        System.out.println(rank+"/"+sourcePrices.size());
 
-        return rank/sourcePrices.size();
+        System.out.println(over);
+        System.out.println(under);
+
+        System.out.println(rank+ "/"+sourcePrices.size());
+
+        System.out.println();
+
+        double temp = (double) rank /sourcePrices.size();
+
+        exchangeRatio.add(temp);
+        //System.out.println(exchangeRatio);
+
+        return temp;
     }
 
-   /* public List ExchangeRatios(List<String> overWeights, List<String> underWeights, Map<String, List<Number>> histories){
-        ArrayList<ValueComparator> Options = new ArrayList();
-        for (int o = 0; o >= overWeights.size(); o++){
-            for (int u = 0; u >= underWeights.size(); u++){
-                Options.add(new ValueComparator(overWeights.get(o), underWeights.get(u),
-                        Attractiveness(histories.get(overWeights.get(o)), histories.get(underWeights.get(u)))));
-            }
-        }
-        Collections.sort(Options, new ScoreCompare());
-        Collections.reverse(Options);
-        
-        System.out.println(Options);
-        return Options;
-    }
-    */
 
 }
