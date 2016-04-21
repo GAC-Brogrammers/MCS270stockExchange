@@ -11,17 +11,22 @@ import java.util.TreeMap;
  * Created by nbens_000 on 4/12/2016.
  */
 public class Algorithim {
-    public double Attractiveness(List<Number> sourcePrices, List<Number> destPrices){
+
+    public Algorithim(List<String> overWeights, ){
+
+    }
+
+    public double Attractiveness(List<Number> overPrices, List<Number> underPrices){
         List ratios = new ArrayList();
-        for (int i=0; i<= sourcePrices.size(); i++){
-            double start = (double)sourcePrices.get(i) / (double)destPrices.get(i);
+        for (int i=0; i<= overPrices.size(); i++){
+            double start = (double)overPrices.get(i) / (double)underPrices.get(i);
             ratios.add(start);
         }
         double latest = (double)ratios.get(-1);
         Collections.sort(ratios);
         Collections.reverse(ratios);
         int rank = 1 + ratios.indexOf(latest);
-        return rank/sourcePrices.size();
+        return rank/overPrices.size();
     }
 
     public List ExchangeRatios(List<String> overWeights, List<String> underWeights, Map<String, List<Number>> histories){
