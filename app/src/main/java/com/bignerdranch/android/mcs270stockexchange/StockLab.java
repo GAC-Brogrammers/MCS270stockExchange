@@ -91,6 +91,9 @@ public class StockLab {
         ContentValues values = new ContentValues();
         values.put(StockDbSchema.StockTable.Cols.UUID, stock.getId().toString());
         values.put(StockDbSchema.StockTable.Cols.TICKER, stock.getTicker());
+        values.put(StockDbSchema.StockTable.Cols.OVERWEIGHT, stock.isOverweight());
+        values.put(StockDbSchema.StockTable.Cols.UNDERWEIGHT, stock.isUnderweight());
+        values.put(StockDbSchema.StockTable.Cols.NEUTRAL, stock.isNeutral());
 
         return values;
     }
