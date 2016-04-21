@@ -8,4 +8,9 @@
     <string name="add_stock_new">Add new stock</string>
     <string name="new_stock">New Stock</string>
     <string name="delete_stock">Delete Stock</string>
+    <string-array name="weights_array">
+        <item>OverWeight</item>
+        <item>UnderWeight</item>
+        <item>Neutral</item>
+    </string-array>
 </resources>
