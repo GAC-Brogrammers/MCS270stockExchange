@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">MCS270stockExchange</string>
-    <string name="ticker_name">Enter a Stock's Ticker Symbol</string>
+    <string name="ticker_name">Enter a Stock\'s Ticker Symbol</string>
     <string name="overweight_box">OverWeight</string>
     <string name="underweight_box">UnderWeight</string>
     <string name="Neutral_box">Neutral</string>
@@ -13,4 +13,5 @@
         <item>UnderWeight</item>
         <item>Neutral</item>
     </string-array>
+    <string name="select_title">Select Type</string>
 </resources>
