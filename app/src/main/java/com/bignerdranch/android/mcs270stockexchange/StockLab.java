@@ -25,14 +25,17 @@ public class StockLab {
         return sStockLab;
     }
 
-    public void addStock(Stock stock){
-        ContentValues values = getContentValues(stock);
+    public void addStock(Stock c){
+        ContentValues values = getContentValues(c);
 
         mDatabase.insert(StockDbSchema.StockTable.NAME, null, values);
     }
 
     public void deleteStock(Stock c) {
-        mDatabase.delete(StockDbSchema.StockTable.NAME, null, null);
+        ContentValues values = getContentValues(c);
+        String rowId = c.getId().toString();
+        mDatabase.delete(StockDbSchema.StockTable.NAME, StockDbSchema.StockTable.Cols.UUID + "= ?",
+                new String[] {rowId});
     }
 
     public List<Stock> getStocks(){
@@ -77,7 +80,6 @@ public class StockLab {
     }
 
 
-
     public void updateStock(Stock stock){
         String uuidString = stock.getId().toString();
         ContentValues values = getContentValues(stock);
@@ -90,10 +92,11 @@ public class StockLab {
     private static ContentValues getContentValues(Stock stock){
         ContentValues values = new ContentValues();
         values.put(StockDbSchema.StockTable.Cols.UUID, stock.getId().toString());
-        values.put(StockDbSchema.StockTable.Cols.TICKER, stock.getTicker());
-        values.put(StockDbSchema.StockTable.Cols.OVERWEIGHT, stock.isOverweight());
-        values.put(StockDbSchema.StockTable.Cols.UNDERWEIGHT, stock.isUnderweight());
-        values.put(StockDbSchema.StockTable.Cols.NEUTRAL, stock.isNeutral());
+        values.put(StockDbSchema.StockTable.Cols.TITLE, stock.getTitle());
+        values.put(StockDbSchema.StockTable.Cols.WEIGHT, stock.getWeight());
+        values.put(StockDbSchema.StockTable.Cols.OVERWEIGHT, stock.isOverWeight() ? 1 : 0);
+        values.put(StockDbSchema.StockTable.Cols.UNDERWEIGHT, stock.isUnderWeight() ? 1 : 0);
+        values.put(StockDbSchema.StockTable.Cols.NEUTRAL, stock.isNeutral() ? 1 : 0);
 
         return values;
     }
