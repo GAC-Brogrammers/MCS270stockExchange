@@ -76,6 +76,7 @@ public class StockDownloader {
                 while(input.hasNextLine()){
                     String line = input.nextLine();
                     String[] stockinfo = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                    //StockHelper sh = new StockHelper();
                     dategetter.add(stockinfo[0]);
                     adjCloses.add(handleDouble(stockinfo[ADJCLOSE]));
                 }
@@ -143,4 +144,3 @@ public class StockDownloader {
 
 
 }
-

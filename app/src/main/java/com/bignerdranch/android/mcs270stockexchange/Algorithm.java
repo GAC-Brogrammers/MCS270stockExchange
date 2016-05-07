@@ -7,10 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Created by nbens_000 on 4/12/2016.
- */
-public class Algorithim {
+
+public class Algorithm {
 
     private ArrayList<String> overWeights;
     private ArrayList<String> underWeights;
@@ -21,7 +19,7 @@ public class Algorithim {
     private String over;
     private String under;
 
-    public Algorithim(ArrayList<String> overWeights, ArrayList<String> underWeights, Map<String, ArrayList<Double>> histories){
+    public Algorithm(ArrayList<String> overWeights, ArrayList<String> underWeights, Map<String, ArrayList<Double>> histories){
         this.underWeights = underWeights;
         this.overWeights = overWeights;
         for (int o = 0; o < overWeights.size(); o++){
@@ -57,11 +55,11 @@ public class Algorithim {
         System.out.println(over);
         System.out.println(under);
 
-        System.out.println(rank+ "/"+sourcePrices.size());
+        System.out.println(rank+"/"+sourcePrices.size());
 
         System.out.println();
 
-        double temp = (double) rank /sourcePrices.size();
+        double temp = (double)rank/sourcePrices.size();
 
         exchangeRatio.add(temp);
         //System.out.println(exchangeRatio);

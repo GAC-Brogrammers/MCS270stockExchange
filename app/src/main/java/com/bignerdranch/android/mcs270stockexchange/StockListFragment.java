@@ -13,11 +13,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.List;
 
+/**
+ * Created by nbens_000 on 3/1/2016.
+ */
 public class StockListFragment extends Fragment {
 
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
@@ -25,22 +31,52 @@ public class StockListFragment extends Fragment {
     private RecyclerView mStockRecyclerView;
     private StockAdapter mAdapter;
     private boolean mSubtitleVisible;
+    private TextView mWelcomeView;
+    private Button mAddStock;
+    private List<Stock> mStocks;
+    private int[] mWeights;
+
+    private static final String SPIN_KEY = "spinner";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        StockLab stockLab = StockLab.get(getActivity());
+        int stockCount = stockLab.getStocks().size();
+
         View view = inflater.inflate(R.layout.fragment_stock_list, container, false);
+        mWelcomeView = (TextView) view.findViewById(R.id.empty_view);
+        mAddStock = (Button) view.findViewById(R.id.first_thing);
+        mAddStock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Stock stock = new Stock();
+                StockLab.get(getActivity()).addStock(stock);
+            }
+        });
 
         mStockRecyclerView = (RecyclerView) view.findViewById(R.id.stock_recycler_view);
         mStockRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         if (savedInstanceState != null) {
             mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
+            mWeights = savedInstanceState.getIntArray(SPIN_KEY);
+        }
+
+        if (stockCount == 0) {
+            mStockRecyclerView.setVisibility(View.GONE);
+            mWelcomeView.setVisibility(View.VISIBLE);
+            mAddStock.setVisibility(View.VISIBLE);
+        }
+        else {
+            mStockRecyclerView.setVisibility(View.VISIBLE);
+            mWelcomeView.setVisibility(View.GONE);
+            mAddStock.setVisibility(View.GONE);
         }
 
         updateUI();
@@ -49,7 +85,7 @@ public class StockListFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
+    public void onResume(){
         super.onResume();
         updateUI();
     }
@@ -58,31 +94,35 @@ public class StockListFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisible);
+        //mStocks = StockLab.get(getActivity()).getStocks();
+        int[] spinners = new int[mStocks.size()];
+        for (int i = 0; i < mStocks.size()-1; i++) {
+            spinners[i] = (mStocks.get(i).getWeight());
+        }
+        outState.putIntArray(SPIN_KEY, spinners);
     }
 
-    /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_stock_list, menu);
 
-        MenuItem subtitleItem = menu.findItem(R.id.menu_item_show_subtitle);
+        MenuItem subTitleItem = menu.findItem(R.id.menu_item_show_subtitle);
         if (mSubtitleVisible) {
-            subtitleItem.setTitle(R.string.hide_subtitle);
-        } else {
-            subtitleItem.setTitle(R.string.show_subtitle);
+            subTitleItem.setTitle(R.string.hide_subtitle);
+        }else{
+            subTitleItem.setTitle(R.string.show_subtitle);
         }
     }
-    */
 
-    /*@Override
-   public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_new_crime:
+            case R.id.menu_item_new_stock:
                 Stock stock = new Stock();
                 StockLab.get(getActivity()).addStock(stock);
-                Intent intent = StockPagerActivity
-                        .newIntent(getActivity(), stock.getId());
-                startActivity(intent);
                 return true;
             case R.id.menu_item_show_subtitle:
                 mSubtitleVisible = !mSubtitleVisible;
@@ -93,86 +133,105 @@ public class StockListFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-    */
 
-    /*private void updateSubtitle() {
+    private void updateSubtitle() {
         StockLab stockLab = StockLab.get(getActivity());
         int stockCount = stockLab.getStocks().size();
-        String subtitle = getString(R.string.subtitle_format, stockCount);
+        String subtitle = getResources()
+                .getQuantityString(R.plurals.subtitle_plural, stockCount, stockCount);
 
-        if (!mSubtitleVisible) {
+        if (!mSubtitleVisible){
             subtitle = null;
         }
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setSubtitle(subtitle);
     }
-    */
 
-    private void updateUI() {
+    private void updateUI(){
         StockLab stockLab = StockLab.get(getActivity());
-        List<Stock> stocks = StockLab.getStocks();
+        mStocks = stockLab.getStocks();
 
         if (mAdapter == null) {
-            mAdapter = new StockAdapter(stocks);
+            mAdapter = new StockAdapter(mStocks);
             mStockRecyclerView.setAdapter(mAdapter);
-        } else {
-            mAdapter.setStocks(stocks);
+            if (mWeights != null){
+                for (int i = 0; i < mStocks.size()-1; i++){
+                    mStocks.get(i).setWeight(mWeights[i]);
+                }
+            }
+        }else{
+            mAdapter.setStocks(mStocks);
             mAdapter.notifyDataSetChanged();
         }
 
-        //updateSubtitle();
+        updateSubtitle();
     }
 
     private class StockHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+            /*implements View.OnClickListener*/ {
 
         private TextView mTitleTextView;
         private TextView mDateTextView;
         private CheckBox mSolvedCheckBox;
-
+        private Spinner mSpinner;
+        //private EditText mEditText;
         private Stock mStock;
+
 
         public StockHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
+            //itemView.setOnClickListener(this);
 
-            //mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
-            //mDateTextView = (TextView) itemView.findViewById(R.id.list_item_crime_date_text_view);
-            //mSolvedCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_crime_solved_check_box);
+            mTitleTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_stock_title_text_view);
+            mSpinner = (Spinner)
+                    itemView.findViewById(R.id.list_item_spinner);
+
         }
 
-        public void bindStock(Stock stock) {
+
+
+        public void bindStock(Stock stock){
             mStock = stock;
-            mTitleTextView.setText(mStock.getTicker());
 
 
-            //To-do shit. Overweiight, underweight stuff
+
+            mTitleTextView.setText(mStock.getTitle());
+            mSpinner.setSelection(mStock.getWeight());
+
+            mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
+                    Object item = parent.getItemAtPosition(pos);
+                    mStock.setWeight(pos);
+                    StockLab.get(getActivity()).updateStock(mStock);
+                }
+
+                public void onNothingSelected(AdapterView<?> parent) {
+                    return;
+                }
+            });
 
 
-            //mSolvedCheckBox.setChecked(mStock.isSolved());
         }
 
-        @Override
-        public void onClick(View v) {
-            //Intent intent = StockPagerActivity.newIntent(getActivity(), mStock.getId());
-            //startActivity(intent);
-        }
     }
-
 
     private class StockAdapter extends RecyclerView.Adapter<StockHolder> {
 
         private List<Stock> mStocks;
 
-        public StockAdapter(List<Stock> stocks) {
+        public StockAdapter(List<Stock> stocks){
             mStocks = stocks;
         }
+
 
         @Override
         public StockHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater.inflate(R.layout.list_item_stock, parent, false);
+
+
             return new StockHolder(view);
         }
 
@@ -187,9 +246,9 @@ public class StockListFragment extends Fragment {
             return mStocks.size();
         }
 
-        public void setStocks(List<Stock> stocks) {
+        public void setStocks(List<Stock> stocks){
             mStocks = stocks;
         }
     }
-}
 
+}

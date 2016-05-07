@@ -4,12 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by nbens_000 on 4/21/2016.
- */
-public class StockBaseHelper extends SQLiteOpenHelper{
+public class StockBaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
-    private static final String DATABASE_NAME = "crimeBase.db";
+    private static final String DATABASE_NAME = "stockBase.db";
 
     public StockBaseHelper(Context context){
         super(context, DATABASE_NAME, null, VERSION);
@@ -20,7 +17,8 @@ public class StockBaseHelper extends SQLiteOpenHelper{
         db.execSQL("create table " + StockDbSchema.StockTable.NAME + "(" +
                 " _id integer primary key autoincrement, " +
                 StockDbSchema.StockTable.Cols.UUID + ", " +
-                StockDbSchema.StockTable.Cols.TICKER + ", " +
+                StockDbSchema.StockTable.Cols.TITLE + ", " +
+                StockDbSchema.StockTable.Cols.WEIGHT + ", " +
                 StockDbSchema.StockTable.Cols.OVERWEIGHT + ", " +
                 StockDbSchema.StockTable.Cols.UNDERWEIGHT + "," +
                 StockDbSchema.StockTable.Cols.NEUTRAL + ")");

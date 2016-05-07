@@ -5,19 +5,21 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by nbens_000 on 4/19/2016.
+ * Created by nbens_000 on 3/1/2016.
  */
 public class StockLab {
     private static StockLab sStockLab;
 
     private Context mContext;
-    private static SQLiteDatabase mDatabase;
+    private SQLiteDatabase mDatabase;
 
     public static StockLab get(Context context) {
         if (sStockLab == null) {
@@ -26,8 +28,8 @@ public class StockLab {
         return sStockLab;
     }
 
-    public void addStock(Stock stock){
-        ContentValues values = getContentValues(stock);
+    public void addStock(Stock c){
+        ContentValues values = getContentValues(c);
 
         mDatabase.insert(StockDbSchema.StockTable.NAME, null, values);
     }
@@ -36,7 +38,7 @@ public class StockLab {
         mDatabase.delete(StockDbSchema.StockTable.NAME, null, null);
     }
 
-    public static List<Stock> getStocks(){
+    public List<Stock> getStocks(){
         List<Stock> stocks = new ArrayList<>();
 
         StockCursorWrapper cursor = queryStocks(null, null);
@@ -78,7 +80,6 @@ public class StockLab {
     }
 
 
-
     public void updateStock(Stock stock){
         String uuidString = stock.getId().toString();
         ContentValues values = getContentValues(stock);
@@ -91,15 +92,16 @@ public class StockLab {
     private static ContentValues getContentValues(Stock stock){
         ContentValues values = new ContentValues();
         values.put(StockDbSchema.StockTable.Cols.UUID, stock.getId().toString());
-        values.put(StockDbSchema.StockTable.Cols.TICKER, stock.getTicker());
-        values.put(StockDbSchema.StockTable.Cols.OVERWEIGHT, stock.isOverweight());
-        values.put(StockDbSchema.StockTable.Cols.UNDERWEIGHT, stock.isUnderweight());
-        values.put(StockDbSchema.StockTable.Cols.NEUTRAL, stock.isNeutral());
+        values.put(StockDbSchema.StockTable.Cols.TITLE, stock.getTitle());
+        values.put(StockDbSchema.StockTable.Cols.WEIGHT, stock.getWeight());
+        values.put(StockDbSchema.StockTable.Cols.OVERWEIGHT, stock.isOverWeight() ? 1 : 0);
+        values.put(StockDbSchema.StockTable.Cols.UNDERWEIGHT, stock.isUnderWeight() ? 1 : 0);
+        values.put(StockDbSchema.StockTable.Cols.NEUTRAL, stock.isNeutral() ? 1 : 0);
 
         return values;
     }
 
-    private static StockCursorWrapper queryStocks(String whereClause, String[] whereArgs){
+    private StockCursorWrapper queryStocks(String whereClause, String[] whereArgs){
         Cursor cursor = mDatabase.query(
                 StockDbSchema.StockTable.NAME,
                 null, // Columns - null selects all columns

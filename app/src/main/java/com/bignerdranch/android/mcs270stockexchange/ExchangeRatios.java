@@ -1,10 +1,9 @@
 package com.bignerdranch.android.mcs270stockexchange;
 
+
 import java.util.Map;
 
-/**
- * Created by nbens_000 on 4/14/2016.
- */
+
 public class ExchangeRatios{
 
     private String over;
