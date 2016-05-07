@@ -1,3 +1,38 @@
 <resources>
-    <string name="app_name">MCS270stockExchange</string>
+    <string name="app_name">MCS270StockExchange</string>
+    <string name="stock_title_hint">Enter a title for the stock.</string>
+    <string name="stock_title_label">Title</string>
+    <string name="stock_details_label">Details</string>
+    <string name="stock_solved_label">Solved</string>
+    <string name="date_picker_title">Date of stock:</string>
+    <string name="new_stock">New stock</string>
+    <string name="compare_stocks">Compare Stocks</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="subtitle_format">%1$s stocks</string>
+    <string name="delete_list_stock">Delete Stock</string>
+    <string name="delete_stock">Cancel stock</string>
+    <string name="welcome_view">No stocks yet</string>
+    <string name="first_stock">Add a stock?</string>
+    <string name="stock_suspect_text">Choose Suspect</string>
+    <string name="stock_report_text">Send stock Report</string>
+    <string name="stock_report">%1$s!
+        The stock was discovered on %2$s. %3$s, and %4$s
+    </string>
+    <string-array name="weights_array">
+        <item>OverWeight</item>
+        <item>Neutral</item>
+        <item>UnderWeight</item>
+    </string-array>
+    <string name="select_prompt">Select Type</string>
+    <string name="stock_report_solved">The case is Solved</string>
+    <string name="stock_report_unsolved">the case is not solved</string>
+    <string name="stock_report_no_suspect">there is no suspect</string>
+    <string name="stock_report_suspect">the suspect is %s.</string>
+    <string name="stock_report_subject">CriminalIntent stock Report</string>
+    <string name="send_report">Send stock report via</string>
+    <plurals name="subtitle_plural">
+        <item quantity="one">%1$s stock</item>
+        <item quantity="other">%1$s stocks</item>
+    </plurals>
 </resources>
