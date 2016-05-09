@@ -95,8 +95,9 @@ public class StockLab {
         values.put(StockDbSchema.StockTable.Cols.TITLE, stock.getTitle());
         values.put(StockDbSchema.StockTable.Cols.WEIGHT, stock.getWeight());
         values.put(StockDbSchema.StockTable.Cols.OVERWEIGHT, stock.isOverWeight() ? 1 : 0);
-        values.put(StockDbSchema.StockTable.Cols.UNDERWEIGHT, stock.isUnderWeight() ? 1 : 0);
         values.put(StockDbSchema.StockTable.Cols.NEUTRAL, stock.isNeutral() ? 1 : 0);
+        values.put(StockDbSchema.StockTable.Cols.UNDERWEIGHT, stock.isUnderWeight() ? 1 : 0);
+
 
         return values;
     }

@@ -23,8 +23,8 @@ public class StockBaseHelper extends SQLiteOpenHelper{
                 StockDbSchema.StockTable.Cols.TITLE + ", " +
                 StockDbSchema.StockTable.Cols.WEIGHT + ", " +
                 StockDbSchema.StockTable.Cols.OVERWEIGHT + ", " +
-                StockDbSchema.StockTable.Cols.UNDERWEIGHT + "," +
-                StockDbSchema.StockTable.Cols.NEUTRAL + ")");
+                StockDbSchema.StockTable.Cols.NEUTRAL + "," +
+                StockDbSchema.StockTable.Cols.UNDERWEIGHT + ")");
 
     }
 

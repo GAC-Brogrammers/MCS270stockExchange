@@ -18,8 +18,9 @@ public class StockCursorWrapper extends CursorWrapper {
         String title = getString(getColumnIndex(StockDbSchema.StockTable.Cols.TITLE));
         int weight = getInt(getColumnIndex(StockDbSchema.StockTable.Cols.WEIGHT));
         int overWeight = getInt(getColumnIndex(StockDbSchema.StockTable.Cols.OVERWEIGHT));
-        int underWeight = getInt(getColumnIndex(StockDbSchema.StockTable.Cols.UNDERWEIGHT));
         int neutral = getInt(getColumnIndex(StockDbSchema.StockTable.Cols.NEUTRAL));
+        int underWeight = getInt(getColumnIndex(StockDbSchema.StockTable.Cols.UNDERWEIGHT));
+
 
         Stock stock = new Stock(UUID.fromString(uuidString));
         stock.setTitle(title);

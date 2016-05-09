@@ -66,7 +66,7 @@ public class StockListFragment extends Fragment {
 
         if (savedInstanceState != null) {
             mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
-            mWeights = savedInstanceState.getIntArray(SPIN_KEY);
+            //mWeights = savedInstanceState.getIntArray(SPIN_KEY);
         }
 
         if (stockCount == 0) {
@@ -96,11 +96,11 @@ public class StockListFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisible);
         mStocks = StockLab.get(getActivity()).getStocks();
-        int[] spinners = new int[mStocks.size()];
+        /*int[] spinners = new int[mStocks.size()];
         for (int i = 0; i < mStocks.size(); i++) {
             spinners[i] = (mStocks.get(i).getWeight());
         }
-        outState.putIntArray(SPIN_KEY, spinners);
+        outState.putIntArray(SPIN_KEY, spinners);*/
     }
 
 
@@ -159,17 +159,19 @@ public class StockListFragment extends Fragment {
         if (mAdapter == null) {
             mAdapter = new StockAdapter(mStocks);
             mStockRecyclerView.setAdapter(mAdapter);
-            if (mWeights != null){
-                for (int i = 0; i < mStocks.size(); i++){
+            /*if (mWeights != null){
+                for (int i = 0; i < mStocks.size()-1; i++){
                     mStocks.get(i).setWeight(mWeights[i]);
                 }
             }
+            */
         }else{
             mAdapter.setStocks(mStocks);
             mAdapter.notifyDataSetChanged();
         }
 
         updateSubtitle();
+
     }
 
     private class StockHolder extends RecyclerView.ViewHolder
@@ -202,14 +204,12 @@ public class StockListFragment extends Fragment {
         public void bindStock(Stock stock){
             mStock = stock;
 
-
-
             mTitleTextView.setText(mStock.getTitle());
             mSpinner.setSelection(mStock.getWeight());
 
             mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
-                    Object item = parent.getItemAtPosition(pos);
+                    //Object item = parent.getItemAtPosition(pos);
                     mStock.setWeight(pos);
                     StockLab.get(getActivity()).updateStock(mStock);
                 }
@@ -238,6 +238,7 @@ public class StockListFragment extends Fragment {
         public StockAdapter(List<Stock> stocks){
             mStocks = stocks;
         }
+
 
 
         @Override

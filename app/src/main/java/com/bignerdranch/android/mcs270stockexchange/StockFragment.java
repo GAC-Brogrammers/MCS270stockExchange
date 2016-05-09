@@ -83,9 +83,9 @@ public class StockFragment extends android.support.v4.app.Fragment{
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Object item = parent.getItemAtPosition(position);
+                //Object item = parent.getItemAtPosition(position);
                 mStock.setWeight(position);
-                StockLab.get(getActivity()).updateStock(mStock);
+                //StockLab.get(getActivity()).updateStock(mStock);
             }
 
 

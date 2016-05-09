@@ -12,8 +12,8 @@ public class StockDbSchema {
             public static final String UUID = "uuid";
             public static final String WEIGHT = "weight";
             public static final String OVERWEIGHT = "overWeight";
-            public static final String UNDERWEIGHT = "underWeight";
             public static final String NEUTRAL = "neutral";
+            public static final String UNDERWEIGHT = "underWeight";
         }
     }
 }

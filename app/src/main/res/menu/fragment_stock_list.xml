@@ -7,14 +7,15 @@
         android:title="@string/new_stock"
         app:showAsAction="ifRoom|withText"/>
 
-    <item
-        android:id="@+id/menu_item_show_subtitle"
-        android:title="@string/show_subtitle"
-        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/menu_item_compare"
         android:title="@string/compare_stocks"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_item_show_subtitle"
+        android:title="@string/show_subtitle"
         app:showAsAction="ifRoom"/>
 
 </menu>
