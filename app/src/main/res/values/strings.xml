@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MCS270StockExchange</string>
     <string name="stock_title_hint">Enter a title for the stock.</string>
+    <string name="bad_stock">The Stock name you entered is not recognized. We deleted it for you, try again.</string>
     <string name="stock_title_label">Title</string>
     <string name="stock_details_label">Details</string>
     <string name="stock_solved_label">Solved</string>

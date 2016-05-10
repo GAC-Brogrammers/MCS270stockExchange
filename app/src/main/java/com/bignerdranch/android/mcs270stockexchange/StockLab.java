@@ -6,13 +6,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
+import java.util.GregorianCalendar;
 
 /**
  * Created by nbens_000 on 4/19/2016.
  */
 public class StockLab {
+    private Calendar now = new GregorianCalendar();
+    private int currentDay = now.get(Calendar.DAY_OF_MONTH);
+    private int currentMonth = now.get(Calendar.MONTH);
+    private int currentYear = now.get(Calendar.YEAR);
+    private GregorianCalendar start = new GregorianCalendar(currentYear, currentMonth, currentDay);
+    private GregorianCalendar end = new GregorianCalendar(currentYear-1, currentMonth, currentDay);
+
     private static StockLab sStockLab;
 
     private Context mContext;
@@ -26,9 +35,11 @@ public class StockLab {
     }
 
     public void addStock(Stock c){
-        ContentValues values = getContentValues(c);
+            ContentValues values = getContentValues(c);
 
-        mDatabase.insert(StockDbSchema.StockTable.NAME, null, values);
+            mDatabase.insert(StockDbSchema.StockTable.NAME, null, values);
+
+
     }
 
     public void deleteStock(Stock c) {
@@ -36,6 +47,16 @@ public class StockLab {
         String rowId = c.getId().toString();
         mDatabase.delete(StockDbSchema.StockTable.NAME, StockDbSchema.StockTable.Cols.UUID + "= ?",
                 new String[] {rowId});
+    }
+
+    public boolean goodStock(Stock c){
+        StockDownloader sd = new StockDownloader(c.getTitle(), start, end);
+        if(sd.getAdjCloses().isEmpty()){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     public List<Stock> getStocks(){

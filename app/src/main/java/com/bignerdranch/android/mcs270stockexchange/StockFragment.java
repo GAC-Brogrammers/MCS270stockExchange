@@ -3,6 +3,7 @@ package com.bignerdranch.android.mcs270stockexchange;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,8 +13,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 /**
@@ -24,9 +29,21 @@ public class StockFragment extends android.support.v4.app.Fragment{
     private static final String ARG_STOCK_ID = "stock_id";
 
     private Stock mStock;
-    private File mPhotoFile;
+    //private File mPhotoFile;
     private EditText mTitleField;
     private Spinner mSpinner;
+
+    ArrayList<Double> adjClosesBS;
+
+    Calendar rightMeow = new GregorianCalendar();
+
+    int currentDay = rightMeow.get(Calendar.DAY_OF_MONTH);
+    int currentMonth = rightMeow.get(Calendar.MONTH);
+    int currentYear = rightMeow.get(Calendar.YEAR);
+
+    GregorianCalendar begin = new GregorianCalendar(currentYear, currentMonth, currentDay);
+    GregorianCalendar finish = new GregorianCalendar(currentYear-1, currentMonth, currentDay);
+
 
 
     public static StockFragment newInstance(UUID crimeId){
@@ -49,9 +66,26 @@ public class StockFragment extends android.support.v4.app.Fragment{
     @Override
     public void onPause(){
         super.onPause();
+        //StockLab.get(getActivity()).updateStock(mStock);
 
-        StockLab.get(getActivity())
-                .updateStock(mStock);
+        StockDownloader sd = new StockDownloader(mStock.getTitle().toUpperCase(), begin, finish);
+
+        if(!Patterns.WEB_URL.matcher(sd.getURL(mStock.getTitle().toUpperCase(), begin, finish)).matches()){
+            StockLab.get(getActivity()).deleteStock(mStock);
+            Toast.makeText(getContext(), R.string.bad_stock, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            StockLab.get(getActivity()).updateStock(mStock);
+        }
+
+        /*StockDownloader sd = new StockDownloader(mStock.getTitle().toUpperCase(), begin, finish);
+        if(sd.getAdjCloses().isEmpty()){
+            StockLab.get(getActivity()).deleteStock(mStock);
+            Toast.makeText(getContext(), R.string.bad_stock, Toast.LENGTH_SHORT).show();
+        }
+        */
+
+
     }
 
     @Override
@@ -69,7 +103,6 @@ public class StockFragment extends android.support.v4.app.Fragment{
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mStock.setTitle(s.toString());
-
             }
 
             @Override

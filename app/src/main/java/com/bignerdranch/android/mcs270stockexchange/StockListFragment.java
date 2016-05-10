@@ -17,7 +17,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -33,6 +36,17 @@ public class StockListFragment extends Fragment {
     private Button mAddStock;
     private List<Stock> mStocks;
     private int[] mWeights;
+    private Button mCompare;
+
+    Calendar rightMeow = new GregorianCalendar();
+
+    int currentDay = rightMeow.get(Calendar.DAY_OF_MONTH);
+    int currentMonth = rightMeow.get(Calendar.MONTH);
+    int currentYear = rightMeow.get(Calendar.YEAR);
+
+    GregorianCalendar start = new GregorianCalendar(currentYear, currentMonth, currentDay);
+    GregorianCalendar end = new GregorianCalendar(currentYear-1, currentMonth, currentDay);
+
 
     private static final String SPIN_KEY = "spinner";
 
@@ -55,11 +69,30 @@ public class StockListFragment extends Fragment {
             public void onClick(View v) {
                 Stock stock = new Stock();
                 StockLab.get(getActivity()).addStock(stock);
-                Intent intent = StockPagerActivity
-                        .newIntent(getActivity(), stock.getId());
+                Intent intent = StockPagerActivity.newIntent(getActivity(), stock.getId());
+                startActivity(intent);
+                /*StockDownloader sd = new StockDownloader(stock.getTitle(), start, end);
+                if(sd.getAdjCloses().isEmpty()){
+                    StockLab.get(getActivity()).deleteStock(stock);
+                    Toast.makeText(getContext(), R.string.bad_stock, Toast.LENGTH_SHORT);
+                }
+                */
+
+            }
+        });
+
+       /* mCompare = (Button) view.findViewById(R.id.menu_item_compare);
+        mCompare.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                StockDownloader DL = new StockDownloader(mStocks.get(0).getTitle(), start, end);
+                Intent intent = ScoreCompare.newIntent(getActivity());
                 startActivity(intent);
             }
         });
+        */
+
+
 
         mStockRecyclerView = (RecyclerView) view.findViewById(R.id.stock_recycler_view);
         mStockRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
