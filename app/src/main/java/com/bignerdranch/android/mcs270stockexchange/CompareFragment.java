@@ -10,7 +10,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by nbens_000 on 5/10/2016.
@@ -83,6 +87,16 @@ public class CompareFragment extends Fragment{
         StockLab stockLab = StockLab.get(getActivity());
         private List<Stock> mOver = new ArrayList<>();
         private List<Stock> mUnder = new ArrayList<>();
+        private List<String> overTick = new ArrayList<>();
+        private List<String> underTick = new ArrayList<>();
+        private Calendar rightMeow = new GregorianCalendar();
+        private int currentDay = rightMeow.get(Calendar.DAY_OF_MONTH);
+        private int currentMonth = rightMeow.get(Calendar.MONTH);
+        private int currentYear = rightMeow.get(Calendar.YEAR);
+        private GregorianCalendar start = new GregorianCalendar(currentYear, currentMonth, currentDay);
+        private GregorianCalendar end = new GregorianCalendar(currentYear-1, currentMonth, currentDay);
+        private ArrayList<StockDownloader> SD = new ArrayList<>();
+        private Map<String, ArrayList<Double>> map = new HashMap<String, ArrayList<Double>>();
 
 
         public ScoreAdapter(List<Stock> stocks) {
@@ -94,6 +108,16 @@ public class CompareFragment extends Fragment{
                     mOver.add(fund);
                 }else if (weight==2){
                     mUnder.add(fund);
+                }
+            }
+            for (int o=0; o<mOver.size(); o++){
+                StockDownloader obese = new StockDownloader(mOver.get(o).getTitle(), start, end);
+                overTick.add(obese.getTicker());
+                map.put(obese.getTicker(), obese.getAdjCloses());
+                for (int u=0; u<mUnder.size(); u++){
+                    StockDownloader scrawny = new StockDownloader(mUnder.get(u).getTitle(), start, end);
+                    underTick.add(scrawny.getTicker());
+                    map.put(scrawny.getTicker(), scrawny.getAdjCloses());
                 }
             }
         }
