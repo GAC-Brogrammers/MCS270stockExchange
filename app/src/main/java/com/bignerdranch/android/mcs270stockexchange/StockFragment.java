@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.io.File;
 import java.util.UUID;
 
 /**
@@ -24,7 +23,6 @@ public class StockFragment extends android.support.v4.app.Fragment{
     private static final String ARG_STOCK_ID = "stock_id";
 
     private Stock mStock;
-    private File mPhotoFile;
     private EditText mTitleField;
     private Spinner mSpinner;
 
@@ -79,6 +77,8 @@ public class StockFragment extends android.support.v4.app.Fragment{
         });
 
         mSpinner = (Spinner)v.findViewById(R.id.stock_spinner);
+
+        mSpinner.setSelection(mStock.getWeight());
 
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

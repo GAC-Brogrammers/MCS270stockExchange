@@ -121,6 +121,10 @@ public class StockListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_item_compare:
+                Intent myIntent = new Intent(getContext(), TestActivity.class);
+                startActivity(myIntent);
+                return true;
             case R.id.menu_item_new_stock:
                 Stock stock = new Stock();
                 StockLab.get(getActivity()).addStock(stock);

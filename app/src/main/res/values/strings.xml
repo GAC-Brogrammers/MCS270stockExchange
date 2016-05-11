@@ -4,6 +4,7 @@
     <string name="stock_title_label">Title</string>
     <string name="stock_details_label">Details</string>
     <string name="stock_solved_label">Solved</string>
+    <string name="no_compare">Nothing to Compare, add a stock!</string>
     <string name="date_picker_title">Date of stock:</string>
     <string name="new_stock">New stock</string>
     <string name="compare_stocks">Compare Stocks</string>

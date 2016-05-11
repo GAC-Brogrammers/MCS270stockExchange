@@ -35,7 +35,7 @@ public class StockLab {
         ContentValues values = getContentValues(c);
         String rowId = c.getId().toString();
         mDatabase.delete(StockDbSchema.StockTable.NAME, StockDbSchema.StockTable.Cols.UUID + "= ?",
-                new String[] {rowId});
+                new String[]{rowId});
     }
 
     public List<Stock> getStocks(){
@@ -47,6 +47,44 @@ public class StockLab {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 stocks.add(cursor.getStock());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return stocks;
+    }
+
+    public List<Stock> getOverWeights(){
+        List<Stock> stocks = new ArrayList<>();
+
+        StockCursorWrapper cursor = queryStocks(null, null);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                if (cursor.getStock().getWeight()==0) {
+                    stocks.add(cursor.getStock());
+                }
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return stocks;
+    }
+
+    public List<Stock> getUnderWeights(){
+        List<Stock> stocks = new ArrayList<>();
+
+        StockCursorWrapper cursor = queryStocks(null, null);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                if (cursor.getStock().getWeight()==2) {
+                    stocks.add(cursor.getStock());
+                }
                 cursor.moveToNext();
             }
         } finally {
