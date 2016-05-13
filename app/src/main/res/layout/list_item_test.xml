@@ -14,10 +14,10 @@
         tools:text="Stock Title"/>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/list_test_score"
-        android:layout_toRightOf="@id/list_item_title_text_view"
+        android:layout_alignParentRight="true"
         android:textStyle="bold"
         android:padding="4dp"
         tools:text="Score"/>

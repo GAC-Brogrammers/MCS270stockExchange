@@ -65,12 +65,9 @@ public class CompareFragment extends Fragment{
                     itemView.findViewById(R.id.list_test_score);
         }
 
-        public void bindScore(Stock over, Stock under){
-            mOverWeight = over;
-            mUnderWeight = under;
-
-            mTitleTextView.setText(mOverWeight.getTitle() + " / " + mUnderWeight.getTitle());
-            //mScoreView.setText();
+        public void bindScore(String title, Double score){
+            mTitleTextView.setText(title);
+            mScoreView.setText(score.toString());
         }
     }
 
@@ -87,8 +84,8 @@ public class CompareFragment extends Fragment{
         StockLab stockLab = StockLab.get(getActivity());
         private List<Stock> mOver = new ArrayList<>();
         private List<Stock> mUnder = new ArrayList<>();
-        private List<String> overTick = new ArrayList<>();
-        private List<String> underTick = new ArrayList<>();
+        private ArrayList<String> overTick = new ArrayList<String>();
+        private ArrayList<String> underTick = new ArrayList<String>();
         private Calendar rightMeow = new GregorianCalendar();
         private int currentDay = rightMeow.get(Calendar.DAY_OF_MONTH);
         private int currentMonth = rightMeow.get(Calendar.MONTH);
@@ -97,6 +94,8 @@ public class CompareFragment extends Fragment{
         private GregorianCalendar end = new GregorianCalendar(currentYear-1, currentMonth, currentDay);
         private ArrayList<StockDownloader> SD = new ArrayList<>();
         private Map<String, ArrayList<Double>> map = new HashMap<String, ArrayList<Double>>();
+        private Algorithm AlGore;
+        private List<String> listTitles = new ArrayList<>();
 
 
         public ScoreAdapter(List<Stock> stocks) {
@@ -111,15 +110,18 @@ public class CompareFragment extends Fragment{
                 }
             }
             for (int o=0; o<mOver.size(); o++){
-                StockDownloader obese = new StockDownloader(mOver.get(o).getTitle(), start, end);
+                /*StockDownloader obese = new StockDownloader(mOver.get(o).getTitle(), start, end);
                 overTick.add(obese.getTicker());
-                map.put(obese.getTicker(), obese.getAdjCloses());
+                map.put(obese.getTicker(), obese.getAdjCloses());*/
+
                 for (int u=0; u<mUnder.size(); u++){
-                    StockDownloader scrawny = new StockDownloader(mUnder.get(u).getTitle(), start, end);
+                    /*StockDownloader scrawny = new StockDownloader(mUnder.get(u).getTitle(), start, end);
                     underTick.add(scrawny.getTicker());
-                    map.put(scrawny.getTicker(), scrawny.getAdjCloses());
+                    map.put(scrawny.getTicker(), scrawny.getAdjCloses());*/
+                    listTitles.add(mOver.get(o).getTitle() + " / " + mUnder.get(u).getTitle());
                 }
             }
+            //AlGore = new Algorithm(overTick, underTick, map);
         }
 
         @Override
@@ -133,9 +135,11 @@ public class CompareFragment extends Fragment{
 
         @Override
         public void onBindViewHolder(ScoreHolder holder, int position) {
-            Stock over = mOver.get(position);
-            Stock under = mUnder.get(position);
-            holder.bindScore(over, under);
+            String title = listTitles.get(position);
+            double score = position;
+            //ArrayList<ExchangeRatios> options = AlGore.getOptions();
+            //Double score = AlGore.getRatio(position);
+            holder.bindScore(title, score);
         }
 
         @Override

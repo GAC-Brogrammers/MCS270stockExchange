@@ -16,6 +16,7 @@ public class Algorithm {
 
     private String over;
     private String under;
+    private String ScoreRatio;
 
     public Algorithm(ArrayList<String> overWeights, ArrayList<String> underWeights, Map<String, ArrayList<Double>> histories){
         this.underWeights = underWeights;
@@ -42,13 +43,13 @@ public class Algorithm {
         return options;
     }
 
-    public ExchangeRatios getRatio(){
-        ExchangeRatios ratio = options.get(0);
+    public Double getRatio(int position){
+        Double ratio = options.get(position).getScore();
         return ratio;
     }
 
     public double Attractiveness(ArrayList<Double> sourcePrices, ArrayList<Double> destPrices){
-        ArrayList<Double> ratios = new ArrayList<Double>();
+        ArrayList<Double> ratios = new ArrayList<>();
         for (int i=0; i< sourcePrices.size(); i++){
             double start = (double)sourcePrices.get(i) / (double)destPrices.get(i);
             ratios.add(start);
@@ -58,7 +59,7 @@ public class Algorithm {
         Collections.reverse(ratios);
         int rank = 1 + ratios.indexOf(latest);
 
-
+        ScoreRatio = (String)(rank + " / " + sourcePrices.size());
         /*System.out.println(over);
         System.out.println(under);
 
@@ -73,4 +74,5 @@ public class Algorithm {
 
         return temp;
     }
+
 }

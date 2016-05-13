@@ -39,7 +39,7 @@
             name = symbol;
 
             //http://real-chart.finance.yahoo.com/table.csv?s=FB&a=03&b=14&c=2015&d=03&e=14&f=2016&g=d&ignore=.csv
-            String url = "http://real-chart.finance.yahoo.com/table.csv?s="+symbol+
+            String url = "http://real-chart.finance.yahoo.com/table.csv?s="+name+
                     "&a="+start.get(Calendar.MONTH)+
                     "&b="+start.get(Calendar.DAY_OF_MONTH)+
                     "&c="+end.get(Calendar.YEAR)+
