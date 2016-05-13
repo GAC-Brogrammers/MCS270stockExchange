@@ -17,6 +17,9 @@
 
         private ArrayList<Double> adjCloses;
 
+        Calendar begin;
+        Calendar finish;
+
 
         //start is today's date
         //end is a year ago today.
@@ -24,11 +27,14 @@
 
             adjCloses = new ArrayList<Double>();
 
+            begin = start;
+            finish = end;
+
             name = symbol;
 
 
             //http://real-chart.finance.yahoo.com/table.csv?s=FB&a=03&b=14&c=2015&d=03&e=14&f=2016&g=d&ignore=.csv
-            String url = "http://real-chart.finance.yahoo.com/table.csv?s="+symbol+
+            /*String url = "http://real-chart.finance.yahoo.com/table.csv?s="+symbol+
                     "&a="+end.get(Calendar.MONTH)+
                     "&b="+end.get(Calendar.DAY_OF_MONTH)+
                     "&c="+end.get(Calendar.YEAR)+
@@ -36,6 +42,8 @@
                     "&e="+start.get(Calendar.DAY_OF_MONTH)+
                     "&f="+start.get(Calendar.YEAR)+
                     "&g=d&ignore=.csv";
+                    */
+            String url = getURL();
 
             // Error URL
             //http://real-chart.finance.yahoo.com/table.csv?s=FB&a=3&b=13&c=2016&d=3&e=13&f=2015&g=d&ignore=.csv
@@ -45,7 +53,7 @@
 
             try{
                 //URL yhoofin = new URL(url);
-                URL yhoofin = new URL(getURL(symbol, start, end));
+                URL yhoofin = new URL(url);
                 //URL yhoofin = new URL("http://real-chart.finance.yahoo.com/table.csv?s=FB&a=03&b=14&c=2015&d=03&e=14&f=2016&g=d&ignore=.csv");
                 URLConnection data = yhoofin.openConnection();
                 Scanner input = new Scanner(data.getInputStream());
@@ -63,7 +71,7 @@
                 //System.out.println(adjCloses);
             }
             catch(Exception e){
-                System.err.println("Stock " +symbol+ " doesn't exist");
+                System.err.println("Stock " +symbol+ " doesn't exist." +e);
             }
 
 
@@ -83,14 +91,14 @@
             adjCloses = ether;
         }
 
-        public String getURL(String ticker, GregorianCalendar start, GregorianCalendar end){
-            return "http://real-chart.finance.yahoo.com/table.csv?s="+ticker+
-                    "&a="+end.get(Calendar.MONTH)+
-                    "&b="+end.get(Calendar.DAY_OF_MONTH)+
-                    "&c="+end.get(Calendar.YEAR)+
-                    "&d="+start.get(Calendar.MONTH)+
-                    "&e="+start.get(Calendar.DAY_OF_MONTH)+
-                    "&f="+start.get(Calendar.YEAR)+
+        public String getURL(){
+            return "http://real-chart.finance.yahoo.com/table.csv?s="+name+
+                    "&a="+finish.get(Calendar.MONTH)+
+                    "&b="+finish.get(Calendar.DAY_OF_MONTH)+
+                    "&c="+finish.get(Calendar.YEAR)+
+                    "&d="+begin.get(Calendar.MONTH)+
+                    "&e="+begin.get(Calendar.DAY_OF_MONTH)+
+                    "&f="+begin.get(Calendar.YEAR)+
                     "&g=d&ignore=.csv";
         }
 

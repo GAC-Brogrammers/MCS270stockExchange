@@ -49,6 +49,7 @@ public class StockLab {
                 new String[] {rowId});
     }
 
+/*
     public boolean goodStock(Stock c){
         StockDownloader sd = new StockDownloader(c.getTitle(), start, end);
         if(sd.getAdjCloses().isEmpty()){
@@ -58,6 +59,7 @@ public class StockLab {
             return true;
         }
     }
+    */
 
     public List<Stock> getStocks(){
         List<Stock> stocks = new ArrayList<>();
