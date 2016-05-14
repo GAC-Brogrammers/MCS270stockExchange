@@ -1,5 +1,7 @@
 package com.bignerdranch.android.mcs270stockexchange;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -150,5 +152,60 @@ public class CompareFragment extends Fragment{
         public void setStocks(List<Stock> stocks){
             mStocks = stocks;
         }
+
+        public List<Stock> getStocks(){
+            return mStocks;
+        }
+    }
+    private class AsyncCaller extends AsyncTask<Void, Void, Void> {
+        ProgressDialog pdLoading = new ProgressDialog(getContext());
+        private List<Stock> mStocks = new ArrayList<>();
+        private List<StockDownloader> SdList = new ArrayList<>();
+        private Calendar rightMeow = new GregorianCalendar();
+        private int currentDay = rightMeow.get(Calendar.DAY_OF_MONTH);
+        private int currentMonth = rightMeow.get(Calendar.MONTH);
+        private int currentYear = rightMeow.get(Calendar.YEAR);
+        private GregorianCalendar start = new GregorianCalendar(currentYear, currentMonth, currentDay);
+        private GregorianCalendar end = new GregorianCalendar(currentYear-1, currentMonth, currentDay);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //this method will be running on UI thread
+            pdLoading.setMessage("\tLoading...");
+            pdLoading.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            //this method will be running on background thread so don't update UI frome here
+            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
+            //String ticker = mStock.getTitle().toUpperCase();
+            mStocks = mAdapter.getStocks();
+            for (int i=0; i<mStocks.size();i++) {
+                String ticker = mStocks.get(i).getTitle();
+                StockDownloader sd = new StockDownloader(ticker, start, end);
+                ArrayList<Double> adjustedCloseValues = sd.getAdjCloses();
+                SdList.add(sd);
+            }
+            return null;
+        }
+
+        public List<StockDownloader> getSdList(){
+            return SdList;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            //this method will be running on UI thread
+
+            pdLoading.dismiss();
+        }
+
     }
 }
