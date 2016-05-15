@@ -77,7 +77,13 @@ public class StockFragment extends android.support.v4.app.Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        new AsyncCaller().execute();
+        if(mSpinner.getSelectedItem().toString().equalsIgnoreCase("Select Something")){
+            StockLab.get(getActivity()).deleteStock(mStock);
+            Toast.makeText(getContext(), R.string.pick_again, Toast.LENGTH_LONG).show();
+        }
+        else{
+            new AsyncCaller().execute();
+        }
 
 
     }
@@ -115,8 +121,10 @@ public class StockFragment extends android.support.v4.app.Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Object item = parent.getItemAtPosition(position);
-                mStock.setWeight(position);
-                StockLab.get(getActivity()).updateStock(mStock);
+                    mStock.setWeight(position);
+                    StockLab.get(getActivity()).updateStock(mStock);
+
+
             }
 
 
@@ -150,6 +158,7 @@ public class StockFragment extends android.support.v4.app.Fragment {
     }
 
 
+
     private class AsyncCaller extends AsyncTask<Void, Void, ArrayList<Double>> {
 
         @Override
@@ -167,8 +176,11 @@ public class StockFragment extends android.support.v4.app.Fragment {
             StockDownloader sd = new StockDownloader(ticker, begin, finish);
             ArrayList<Double> adjustedCloseValues = sd.getAdjCloses();
 
+
             return adjustedCloseValues;
+
         }
+
 
 
         @Override
@@ -186,7 +198,6 @@ public class StockFragment extends android.support.v4.app.Fragment {
             else if(!result.isEmpty()){
                 mStock.setTitle(tickersymbol);
                 StockLab.get(getActivity()).updateStock(mStock);
-                StockListFragment.strobeLightCounter = 2;
             }
 
 
@@ -195,6 +206,7 @@ public class StockFragment extends android.support.v4.app.Fragment {
 
             //pdLoading.dismiss();
         }
+
 
     }
 

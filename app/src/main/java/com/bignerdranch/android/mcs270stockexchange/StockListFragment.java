@@ -39,7 +39,7 @@ public class StockListFragment extends Fragment {
     private int[] mWeights;
     private Button mCompare;
     private static final String KEY_INDEX = "index";
-    public static int strobeLightCounter =0;
+    public static int strobeLightCounter=2;
 
 
     private static final String SPIN_KEY = "spinner";
@@ -49,9 +49,10 @@ public class StockListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         /*if(savedInstanceState != null){
-            strobeLightCounter = savedInstanceState.getInt(KEY_INDEX, 1);
+            strobeLightCounter = savedInstanceState.getInt(KEY_INDEX);
         }
         */
+
     }
 
     @Override
@@ -101,10 +102,15 @@ public class StockListFragment extends Fragment {
         return view;
     }
 
+
     @Override
     public void onResume(){
         super.onResume();
         updateUI();
+        if(strobeLightCounter ==2){
+            strobeLightCounter = 0;
+            getActivity().recreate();
+        }
     }
 
 
@@ -175,6 +181,11 @@ public class StockListFragment extends Fragment {
             mAdapter.setStocks(mStocks);
             mAdapter.notifyDataSetChanged();
         }
+        if(strobeLightCounter ==2){
+            strobeLightCounter = 0;
+            getActivity().recreate();
+        }
+
     }
 
     private class StockHolder extends RecyclerView.ViewHolder
@@ -229,11 +240,6 @@ public class StockListFragment extends Fragment {
                     updateUI();
                 }
             });
-
-            if(strobeLightCounter == 2){
-                strobeLightCounter = 0;
-                getActivity().recreate();
-            }
 
 
 

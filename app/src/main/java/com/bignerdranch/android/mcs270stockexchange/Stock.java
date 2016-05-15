@@ -29,13 +29,13 @@ public class Stock {
     }
 
     public int getWeight(){
-        if(mWeight == 0){
+        if(mWeight == 1){
             setOverWeight(true);
         }
-        else if (mWeight == 1){
+        else if (mWeight == 2){
             setNeutral(true);
         }
-        else if(mWeight==2){
+        else if(mWeight==3){
             setUnderWeight(true);
         }
         return mWeight;
