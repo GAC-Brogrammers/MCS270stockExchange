@@ -101,6 +101,7 @@ public class CompareFragment extends Fragment{
         private Map<String, ArrayList<Double>> map = new HashMap<>();
         private Algorithm AlGore;
         private List<String> listTitles = new ArrayList<>();
+        private ArrayList<ExchangeRatios> mOptions;
 
 
         public ScoreAdapter(List<Stock> stocks) {
@@ -126,7 +127,10 @@ public class CompareFragment extends Fragment{
                 }
             }
             map = mAsyncCaller.getMap();
+            //AlGore = mAsyncCaller.getAlGore();
+
             AlGore = new Algorithm(overTick, underTick, map);
+            mOptions = AlGore.getOptions();
         }
 
         @Override
@@ -140,10 +144,9 @@ public class CompareFragment extends Fragment{
 
         @Override
         public void onBindViewHolder(ScoreHolder holder, int position) {
+
+            double score = mOptions.get(position).getScore();
             String title = listTitles.get(position);
-            double score = position;
-            //ArrayList<ExchangeRatios> options = AlGore.getOptions();
-            //Double score = AlGore.getRatio(position);
             holder.bindScore(title, score);
         }
 
@@ -172,6 +175,7 @@ public class CompareFragment extends Fragment{
         private GregorianCalendar end = new GregorianCalendar(currentYear-1, currentMonth, currentDay);
         private Map<String, ArrayList<Double>> map = new HashMap<String, ArrayList<Double>>();
 
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -196,12 +200,14 @@ public class CompareFragment extends Fragment{
                 map.put(ticker, adjustedCloseValues);
                 SdList.add(sd);
             }
+
             return null;
         }
 
         public Map getMap(){
             return map;
         }
+
 
 
         @Override

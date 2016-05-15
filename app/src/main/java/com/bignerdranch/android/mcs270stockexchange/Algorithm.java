@@ -12,21 +12,28 @@ public class Algorithm {
     private ArrayList<String> underWeights;
     private ArrayList<Double> exchangeRatio = new ArrayList<Double>();
 
-    private ArrayList<ExchangeRatios> options = new ArrayList<ExchangeRatios>();
+    private ArrayList<ExchangeRatios> options;// = new ArrayList<ExchangeRatios>();
 
     private String over;
     private String under;
     private String ScoreRatio;
 
+
+
     public Algorithm(ArrayList<String> overWeights, ArrayList<String> underWeights, Map<String, ArrayList<Double>> histories){
         this.underWeights = underWeights;
         this.overWeights = overWeights;
+        options = new ArrayList<>();
         for (int o = 0; o < overWeights.size(); o++){
             for (int u = 0; u < underWeights.size(); u++){
                 //If wanting to get ArrayList Exchange Ratio for two particular stocks. Put a counter here. :D
 
                 over = overWeights.get(o);
                 under = underWeights.get(u);
+                if (histories.get(overWeights.get(o)) == null ||
+                        histories.get(underWeights.get(u)) == null){
+                    break;
+                }
 
                 options.add(new ExchangeRatios(overWeights.get(o), underWeights.get(u),
                         Attractiveness(histories.get(overWeights.get(o)), histories.get(underWeights.get(u)))));
@@ -34,18 +41,26 @@ public class Algorithm {
             }
         }
         Collections.sort(options, new ScoreComparator());
-        Collections.reverse(options);
+        //Collections.reverse(options);
 
         //System.out.println(exchangeRatio);
     }
+
+
 
     public ArrayList<ExchangeRatios> getOptions(){
         return options;
     }
 
     public Double getRatio(int position){
+        for (int opt = 0; opt < 2; opt++) {
+            if (options.size() == 0) {
+                break;
+            }
+        }
         Double ratio = options.get(position).getScore();
         return ratio;
+
     }
 
     public double Attractiveness(ArrayList<Double> sourcePrices, ArrayList<Double> destPrices){
