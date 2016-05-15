@@ -27,6 +27,7 @@ public class CompareFragment extends Fragment{
     private TextView mNoStocks;
     private List<Stock> mStocks;
     private ScoreAdapter mAdapter;
+    private AsyncCaller mAsyncCaller;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +77,8 @@ public class CompareFragment extends Fragment{
     private void ScorePrep(){
         StockLab stockLab = StockLab.get(getActivity());
         mStocks = stockLab.getStocks();
+        mAsyncCaller = new AsyncCaller();
+        mAsyncCaller.execute();
         mAdapter = new ScoreAdapter(mStocks);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -95,7 +98,7 @@ public class CompareFragment extends Fragment{
         private GregorianCalendar start = new GregorianCalendar(currentYear, currentMonth, currentDay);
         private GregorianCalendar end = new GregorianCalendar(currentYear-1, currentMonth, currentDay);
         private ArrayList<StockDownloader> SD = new ArrayList<>();
-        private Map<String, ArrayList<Double>> map = new HashMap<String, ArrayList<Double>>();
+        private Map<String, ArrayList<Double>> map = new HashMap<>();
         private Algorithm AlGore;
         private List<String> listTitles = new ArrayList<>();
 
@@ -112,18 +115,18 @@ public class CompareFragment extends Fragment{
                 }
             }
             for (int o=0; o<mOver.size(); o++){
-                /*StockDownloader obese = new StockDownloader(mOver.get(o).getTitle(), start, end);
+                StockDownloader obese = new StockDownloader(mOver.get(o).getTitle(), start, end);
                 overTick.add(obese.getTicker());
-                map.put(obese.getTicker(), obese.getAdjCloses());*/
 
                 for (int u=0; u<mUnder.size(); u++){
-                    /*StockDownloader scrawny = new StockDownloader(mUnder.get(u).getTitle(), start, end);
+                    StockDownloader scrawny = new StockDownloader(mUnder.get(u).getTitle(), start, end);
                     underTick.add(scrawny.getTicker());
-                    map.put(scrawny.getTicker(), scrawny.getAdjCloses());*/
                     listTitles.add(mOver.get(o).getTitle() + " / " + mUnder.get(u).getTitle());
+
                 }
             }
-            //AlGore = new Algorithm(overTick, underTick, map);
+            map = mAsyncCaller.getMap();
+            AlGore = new Algorithm(overTick, underTick, map);
         }
 
         @Override
@@ -167,6 +170,7 @@ public class CompareFragment extends Fragment{
         private int currentYear = rightMeow.get(Calendar.YEAR);
         private GregorianCalendar start = new GregorianCalendar(currentYear, currentMonth, currentDay);
         private GregorianCalendar end = new GregorianCalendar(currentYear-1, currentMonth, currentDay);
+        private Map<String, ArrayList<Double>> map = new HashMap<String, ArrayList<Double>>();
 
         @Override
         protected void onPreExecute() {
@@ -183,18 +187,20 @@ public class CompareFragment extends Fragment{
             //this method will be running on background thread so don't update UI frome here
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
             //String ticker = mStock.getTitle().toUpperCase();
-            mStocks = mAdapter.getStocks();
+            StockLab stockLab = StockLab.get(getActivity());
+            mStocks = stockLab.getStocks();
             for (int i=0; i<mStocks.size();i++) {
                 String ticker = mStocks.get(i).getTitle();
                 StockDownloader sd = new StockDownloader(ticker, start, end);
                 ArrayList<Double> adjustedCloseValues = sd.getAdjCloses();
+                map.put(ticker, adjustedCloseValues);
                 SdList.add(sd);
             }
             return null;
         }
 
-        public List<StockDownloader> getSdList(){
-            return SdList;
+        public Map getMap(){
+            return map;
         }
 
 
