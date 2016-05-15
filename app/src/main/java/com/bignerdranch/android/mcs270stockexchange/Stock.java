@@ -29,13 +29,15 @@ public class Stock {
     }
 
     public int getWeight(){
-        /*if (this.isOverWeight()){
-            mWeight = 0;
-        }else if (this.isNeutral()){
-            mWeight = 1;
-        }else if (this.isUnderWeight()){
-            mWeight=2;
-        }*/
+        if(mWeight == 0){
+            setOverWeight(true);
+        }
+        else if (mWeight == 1){
+            setNeutral(true);
+        }
+        else if(mWeight==2){
+            setUnderWeight(true);
+        }
         return mWeight;
     }
 

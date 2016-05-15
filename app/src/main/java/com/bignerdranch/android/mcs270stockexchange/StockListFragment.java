@@ -1,5 +1,6 @@
 package com.bignerdranch.android.mcs270stockexchange;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,15 +38,8 @@ public class StockListFragment extends Fragment {
     private List<Stock> mStocks;
     private int[] mWeights;
     private Button mCompare;
-
-    Calendar rightMeow = new GregorianCalendar();
-
-    int currentDay = rightMeow.get(Calendar.DAY_OF_MONTH);
-    int currentMonth = rightMeow.get(Calendar.MONTH);
-    int currentYear = rightMeow.get(Calendar.YEAR);
-
-    GregorianCalendar start = new GregorianCalendar(currentYear, currentMonth, currentDay);
-    GregorianCalendar end = new GregorianCalendar(currentYear-1, currentMonth, currentDay);
+    private static final String KEY_INDEX = "index";
+    public static int strobeLightCounter =0;
 
 
     private static final String SPIN_KEY = "spinner";
@@ -54,6 +48,10 @@ public class StockListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        /*if(savedInstanceState != null){
+            strobeLightCounter = savedInstanceState.getInt(KEY_INDEX, 1);
+        }
+        */
     }
 
     @Override
@@ -71,26 +69,10 @@ public class StockListFragment extends Fragment {
                 StockLab.get(getActivity()).addStock(stock);
                 Intent intent = StockPagerActivity.newIntent(getActivity(), stock.getId());
                 startActivity(intent);
-                /*StockDownloader sd = new StockDownloader(stock.getTitle(), start, end);
-                if(sd.getAdjCloses().isEmpty()){
-                    StockLab.get(getActivity()).deleteStock(stock);
-                    Toast.makeText(getContext(), R.string.bad_stock, Toast.LENGTH_SHORT);
-                }
-                */
 
             }
         });
 
-       /* mCompare = (Button) view.findViewById(R.id.menu_item_compare);
-        mCompare.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                StockDownloader DL = new StockDownloader(mStocks.get(0).getTitle(), start, end);
-                Intent intent = ScoreCompare.newIntent(getActivity());
-                startActivity(intent);
-            }
-        });
-        */
 
 
 
@@ -113,6 +95,7 @@ public class StockListFragment extends Fragment {
             mAddStock.setVisibility(View.GONE);
         }
 
+
         updateUI();
 
         return view;
@@ -124,6 +107,8 @@ public class StockListFragment extends Fragment {
         updateUI();
     }
 
+
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -134,7 +119,9 @@ public class StockListFragment extends Fragment {
             spinners[i] = (mStocks.get(i).getWeight());
         }
         outState.putIntArray(SPIN_KEY, spinners);
+        //outState.putInt(KEY_INDEX, strobeLightCounter);
     }
+
 
 
 
@@ -164,26 +151,13 @@ public class StockListFragment extends Fragment {
             case R.id.menu_item_show_subtitle:
                 mSubtitleVisible = !mSubtitleVisible;
                 getActivity().invalidateOptionsMenu();
-                updateSubtitle();
+                //updateSubtitle();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void updateSubtitle() {
-        StockLab stockLab = StockLab.get(getActivity());
-        int stockCount = stockLab.getStocks().size();
-        String subtitle = getResources()
-                .getQuantityString(R.plurals.subtitle_plural, stockCount, stockCount);
-
-        if (!mSubtitleVisible){
-            subtitle = null;
-        }
-
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.getSupportActionBar().setSubtitle(subtitle);
-    }
 
     private void updateUI(){
         StockLab stockLab = StockLab.get(getActivity());
@@ -201,25 +175,20 @@ public class StockListFragment extends Fragment {
             mAdapter.setStocks(mStocks);
             mAdapter.notifyDataSetChanged();
         }
-
-        updateSubtitle();
     }
 
     private class StockHolder extends RecyclerView.ViewHolder
             /*implements View.OnClickListener*/ {
 
         private TextView mTitleTextView;
-        private TextView mDateTextView;
-        private CheckBox mSolvedCheckBox;
+
         private Spinner mSpinner;
         private Button mDeleteButton;
-        //private EditText mEditText;
         private Stock mStock;
 
 
         public StockHolder(View itemView) {
             super(itemView);
-            //itemView.setOnClickListener(this);
 
             mTitleTextView = (TextView)
                     itemView.findViewById(R.id.list_item_stock_title_text_view);
@@ -233,6 +202,7 @@ public class StockListFragment extends Fragment {
 
 
         public void bindStock(Stock stock){
+
             mStock = stock;
 
 
@@ -260,7 +230,16 @@ public class StockListFragment extends Fragment {
                 }
             });
 
+            if(strobeLightCounter == 2){
+                strobeLightCounter = 0;
+                getActivity().recreate();
+            }
+
+
+
+
         }
+
 
     }
 
