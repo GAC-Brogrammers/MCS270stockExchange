@@ -25,15 +25,16 @@ public class Algorithm {
         this.overWeights = overWeights;
         options = new ArrayList<>();
         for (int o = 0; o < overWeights.size(); o++){
+            over = overWeights.get(o);
             for (int u = 0; u < underWeights.size(); u++){
                 //If wanting to get ArrayList Exchange Ratio for two particular stocks. Put a counter here. :D
 
-                over = overWeights.get(o);
+                //over = overWeights.get(o);
                 under = underWeights.get(u);
-                if (histories.get(overWeights.get(o)) == null ||
+                /*if (histories.get(overWeights.get(o)) == null ||
                         histories.get(underWeights.get(u)) == null){
                     break;
-                }
+                }*/
 
                 options.add(new ExchangeRatios(overWeights.get(o), underWeights.get(u),
                         Attractiveness(histories.get(overWeights.get(o)), histories.get(underWeights.get(u)))));
@@ -52,20 +53,21 @@ public class Algorithm {
         return options;
     }
 
-    public Double getRatio(int position){
-        for (int opt = 0; opt < 2; opt++) {
-            if (options.size() == 0) {
-                break;
-            }
-        }
+    public String getRatio(int position){
         Double ratio = options.get(position).getScore();
-        return ratio;
+        return "rank: "+ratio + " out of this year";
 
     }
 
     public double Attractiveness(ArrayList<Double> sourcePrices, ArrayList<Double> destPrices){
         ArrayList<Double> ratios = new ArrayList<>();
-        for (int i=0; i< sourcePrices.size(); i++){
+        int bigger;
+        if (sourcePrices.size()>destPrices.size()){
+            bigger = sourcePrices.size();
+        }else{
+            bigger = destPrices.size();
+        }
+        for (int i=0; i< bigger; i++){
             double start = (double)sourcePrices.get(i) / (double)destPrices.get(i);
             ratios.add(start);
         }
@@ -87,7 +89,7 @@ public class Algorithm {
         exchangeRatio.add(temp);
         //System.out.println(exchangeRatio);
 
-        return temp;
+        return rank;
     }
 
 }

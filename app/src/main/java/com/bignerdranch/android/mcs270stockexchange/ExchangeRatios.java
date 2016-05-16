@@ -13,10 +13,16 @@ public class ExchangeRatios {
         this.over = over;
         this.under = under;
         this.score = score;
+
     }
+
 
     public Double getScore(){
         //System.out.println(score);
         return score;
+    }
+
+    public String getName(){
+        return over + " / " + under;
     }
 }

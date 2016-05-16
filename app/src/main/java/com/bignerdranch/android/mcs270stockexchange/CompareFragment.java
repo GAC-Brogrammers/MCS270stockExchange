@@ -3,6 +3,7 @@ package com.bignerdranch.android.mcs270stockexchange;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +28,7 @@ public class CompareFragment extends Fragment{
     private TextView mNoStocks;
     private List<Stock> mStocks;
     private ScoreAdapter mAdapter;
-    private AsyncCaller mAsyncCaller;
+    private AsyncScoreCaller mAsyncScoreCaller;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,18 +69,22 @@ public class CompareFragment extends Fragment{
                     itemView.findViewById(R.id.list_test_score);
         }
 
-        public void bindScore(String title, Double score){
-            mTitleTextView.setText(title);
-            mScoreView.setText(score.toString());
+        public void bindScore(ExchangeRatios ER){
+            mTitleTextView.setText(ER.getName());
+            mScoreView.setText("rank: " + ER.getScore() + " out of this year");
         }
     }
 
     private void ScorePrep(){
         StockLab stockLab = StockLab.get(getActivity());
         mStocks = stockLab.getStocks();
-        mAsyncCaller = new AsyncCaller();
-        mAsyncCaller.execute();
+        mAsyncScoreCaller = new AsyncScoreCaller();
+        mAsyncScoreCaller.execute();
+        for (int y = 0; y<mStocks.size();y++){
+            SystemClock.sleep(500);
+        }
         mAdapter = new ScoreAdapter(mStocks);
+        mAdapter.setHasStableIds(false);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -106,6 +111,13 @@ public class CompareFragment extends Fragment{
 
         public ScoreAdapter(List<Stock> stocks) {
             mStocks = stocks;
+            makeAlgorithm();
+
+            //SystemClock.sleep(100);
+
+        }
+
+        public void makeAlgorithm(){
             for (int i=0; i<mStocks.size(); i++){
                 Stock fund = mStocks.get(i);
                 int weight = fund.getWeight();
@@ -115,19 +127,20 @@ public class CompareFragment extends Fragment{
                     mUnder.add(fund);
                 }
             }
+
             for (int o=0; o<mOver.size(); o++){
-                StockDownloader obese = new StockDownloader(mOver.get(o).getTitle(), start, end);
-                overTick.add(obese.getTicker());
+                //StockDownloader obese = new StockDownloader(mOver.get(o).getTitle(), start, end);
+                overTick.add(mOver.get(o).getTitle());
 
                 for (int u=0; u<mUnder.size(); u++){
-                    StockDownloader scrawny = new StockDownloader(mUnder.get(u).getTitle(), start, end);
-                    underTick.add(scrawny.getTicker());
+                    //StockDownloader scrawny = new StockDownloader(mUnder.get(u).getTitle(), start, end);
+                    underTick.add(mUnder.get(u).getTitle());
                     listTitles.add(mOver.get(o).getTitle() + " / " + mUnder.get(u).getTitle());
 
                 }
             }
-            map = mAsyncCaller.getMap();
-            //AlGore = mAsyncCaller.getAlGore();
+            map = mAsyncScoreCaller.getMap();
+            //AlGore = mAsyncScoreCaller.getAlGore();
 
             AlGore = new Algorithm(overTick, underTick, map);
             mOptions = AlGore.getOptions();
@@ -142,12 +155,14 @@ public class CompareFragment extends Fragment{
             return new ScoreHolder(view);
         }
 
+
         @Override
         public void onBindViewHolder(ScoreHolder holder, int position) {
+            //SystemClock.sleep(500);
 
-            double score = mOptions.get(position).getScore();
-            String title = listTitles.get(position);
-            holder.bindScore(title, score);
+            //String score = AlGore.getRatio(position);
+            ExchangeRatios exchangeRatios = mOptions.get(position);
+            holder.bindScore(exchangeRatios);
         }
 
         @Override
@@ -163,7 +178,7 @@ public class CompareFragment extends Fragment{
             return mStocks;
         }
     }
-    private class AsyncCaller extends AsyncTask<Void, Void, Void> {
+    private class AsyncScoreCaller extends AsyncTask<Void, Void, Void> {
         ProgressDialog pdLoading = new ProgressDialog(getContext());
         private List<Stock> mStocks = new ArrayList<>();
         private List<StockDownloader> SdList = new ArrayList<>();
