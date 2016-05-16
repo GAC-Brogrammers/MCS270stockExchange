@@ -1,10 +1,8 @@
 package com.bignerdranch.android.mcs270stockexchange;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,13 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -37,9 +31,6 @@ public class StockListFragment extends Fragment {
     private Button mAddStock;
     private List<Stock> mStocks;
     private int[] mWeights;
-    private Button mCompare;
-    private static final String KEY_INDEX = "index";
-    public static int strobeLightCounter=2;
 
 
     private static final String SPIN_KEY = "spinner";
@@ -48,10 +39,6 @@ public class StockListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        /*if(savedInstanceState != null){
-            strobeLightCounter = savedInstanceState.getInt(KEY_INDEX);
-        }
-        */
 
     }
 
@@ -107,10 +94,6 @@ public class StockListFragment extends Fragment {
     public void onResume(){
         super.onResume();
         updateUI();
-        if(strobeLightCounter ==2){
-            strobeLightCounter = 0;
-            getActivity().recreate();
-        }
     }
 
 
@@ -125,7 +108,6 @@ public class StockListFragment extends Fragment {
             spinners[i] = (mStocks.get(i).getWeight());
         }
         outState.putIntArray(SPIN_KEY, spinners);
-        //outState.putInt(KEY_INDEX, strobeLightCounter);
     }
 
 
@@ -157,7 +139,6 @@ public class StockListFragment extends Fragment {
             case R.id.menu_item_show_subtitle:
                 mSubtitleVisible = !mSubtitleVisible;
                 getActivity().invalidateOptionsMenu();
-                //updateSubtitle();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -181,15 +162,10 @@ public class StockListFragment extends Fragment {
             mAdapter.setStocks(mStocks);
             mAdapter.notifyDataSetChanged();
         }
-        if(strobeLightCounter ==2){
-            strobeLightCounter = 0;
-            getActivity().recreate();
-        }
 
     }
 
-    private class StockHolder extends RecyclerView.ViewHolder
-            /*implements View.OnClickListener*/ {
+    private class StockHolder extends RecyclerView.ViewHolder {
 
         private TextView mTitleTextView;
 
@@ -223,7 +199,6 @@ public class StockListFragment extends Fragment {
 
             mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
-                    Object item = parent.getItemAtPosition(pos);
                     mStock.setWeight(pos);
                     StockLab.get(getActivity()).updateStock(mStock);
                 }

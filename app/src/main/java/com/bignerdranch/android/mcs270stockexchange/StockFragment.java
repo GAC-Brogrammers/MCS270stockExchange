@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +29,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 /**
@@ -39,11 +41,9 @@ public class StockFragment extends android.support.v4.app.Fragment {
 
     private Stock mStock;
     private String tickersymbol;
-    //private File mPhotoFile;
     private EditText mTitleField;
     private Spinner mSpinner;
 
-    ArrayList<Double> adjClosesBS;
 
     Calendar rightMeow = new GregorianCalendar();
 
@@ -82,7 +82,23 @@ public class StockFragment extends android.support.v4.app.Fragment {
             Toast.makeText(getContext(), R.string.pick_again, Toast.LENGTH_LONG).show();
         }
         else{
-            new AsyncCaller().execute();
+            AsyncCaller a = new AsyncCaller();
+            a.execute();
+            ArrayList<Double> result = null;
+            try {
+                result = a.get();
+            } catch (InterruptedException|ExecutionException e) {
+                Log.e("MCS270StockExchange", "Exception during asynchronous fetch", e);
+            }
+            if (result == null || result.isEmpty()) {
+                StockLab.get(getActivity()).deleteStock(mStock);
+                Toast.makeText(getContext(), R.string.bad_stock, Toast.LENGTH_LONG).show();
+                getActivity().finish();
+            }
+            else {
+                mStock.setTitle(tickersymbol);
+                StockLab.get(getActivity()).updateStock(mStock);
+            }
         }
 
 
@@ -120,7 +136,6 @@ public class StockFragment extends android.support.v4.app.Fragment {
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Object item = parent.getItemAtPosition(position);
                     mStock.setWeight(position);
                     StockLab.get(getActivity()).updateStock(mStock);
 
@@ -180,33 +195,6 @@ public class StockFragment extends android.support.v4.app.Fragment {
             return adjustedCloseValues;
 
         }
-
-
-
-        @Override
-        protected void onPostExecute(ArrayList<Double> result) {
-            super.onPostExecute(result);
-
-            if(result.isEmpty()){
-                //TODO Delete Stock
-
-                StockLab.get(getActivity()).deleteStock(mStock);
-                Toast.makeText(getContext(), R.string.bad_stock, Toast.LENGTH_LONG).show();
-                StockListFragment.strobeLightCounter = 2;
-                getActivity().finish();
-            }
-            else if(!result.isEmpty()){
-                mStock.setTitle(tickersymbol);
-                StockLab.get(getActivity()).updateStock(mStock);
-            }
-
-
-
-            //this method will be running on UI thread
-
-            //pdLoading.dismiss();
-        }
-
 
     }
 
