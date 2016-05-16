@@ -63,7 +63,7 @@ public class StockLab {
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                if (cursor.getStock().getWeight()==0) {
+                if (cursor.getStock().getWeight()==1) {
                     stocks.add(cursor.getStock());
                 }
                 cursor.moveToNext();
@@ -82,7 +82,7 @@ public class StockLab {
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                if (cursor.getStock().getWeight()==2) {
+                if (cursor.getStock().getWeight()==3) {
                     stocks.add(cursor.getStock());
                 }
                 cursor.moveToNext();

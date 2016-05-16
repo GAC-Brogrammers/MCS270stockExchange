@@ -81,7 +81,7 @@ public class CompareFragment extends Fragment{
         mAsyncScoreCaller = new AsyncScoreCaller();
         mAsyncScoreCaller.execute();
         for (int y = 0; y<mStocks.size();y++){
-            SystemClock.sleep(500);
+            SystemClock.sleep(300);
         }
         mAdapter = new ScoreAdapter(mStocks);
         mAdapter.setHasStableIds(false);
@@ -121,24 +121,24 @@ public class CompareFragment extends Fragment{
             for (int i=0; i<mStocks.size(); i++){
                 Stock fund = mStocks.get(i);
                 int weight = fund.getWeight();
-                if (weight == 0){
+                if (weight == 1){
                     mOver.add(fund);
-                }else if (weight==2){
+                }else if (weight==3){
                     mUnder.add(fund);
                 }
             }
 
-            for (int o=0; o<mOver.size(); o++){
+            for (int o=0; o<mOver.size(); o++) {
                 //StockDownloader obese = new StockDownloader(mOver.get(o).getTitle(), start, end);
                 overTick.add(mOver.get(o).getTitle());
-
-                for (int u=0; u<mUnder.size(); u++){
-                    //StockDownloader scrawny = new StockDownloader(mUnder.get(u).getTitle(), start, end);
-                    underTick.add(mUnder.get(u).getTitle());
-                    listTitles.add(mOver.get(o).getTitle() + " / " + mUnder.get(u).getTitle());
-
-                }
             }
+            for (int u=0; u<mUnder.size(); u++){
+                //StockDownloader scrawny = new StockDownloader(mUnder.get(u).getTitle(), start, end);
+                underTick.add(mUnder.get(u).getTitle());
+                //listTitles.add(mOver.get(o).getTitle() + " / " + mUnder.get(u).getTitle());
+
+            }
+
             map = mAsyncScoreCaller.getMap();
             //AlGore = mAsyncScoreCaller.getAlGore();
 

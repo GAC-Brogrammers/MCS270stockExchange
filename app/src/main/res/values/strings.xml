@@ -6,6 +6,7 @@
     <string name="stock_solved_label">Solved</string>
     <string name="no_compare">Nothing to Compare, add a stock!</string>
     <string name="date_picker_title">Date of stock:</string>
+    <string name="bad_stock">The Stock name you entered is not recognized. We deleted it for you, try again.</string>
     <string name="new_stock">New stock</string>
     <string name="compare_stocks">Compare Stocks</string>
     <string name="show_subtitle">Show Subtitle</string>
@@ -13,6 +14,7 @@
     <string name="subtitle_format">%1$s stocks</string>
     <string name="delete_list_stock">Delete Stock</string>
     <string name="delete_stock">Cancel stock</string>
+    <string name="pick_again">Please Select a proper weight.</string>
     <string name="welcome_view">No stocks yet</string>
     <string name="first_stock">Add a stock?</string>
     <string name="stock_suspect_text">Choose Suspect</string>
@@ -21,6 +23,7 @@
         The stock was discovered on %2$s. %3$s, and %4$s
     </string>
     <string-array name="weights_array">
+        <item>Select Something</item>
         <item>OverWeight</item>
         <item>Neutral</item>
         <item>UnderWeight</item>
